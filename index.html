@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Lou 💜</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Pacifico&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --secondary: #C084FC;
+            --accent: #E879F9;
+            --bg: #0f0720;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #F3F4F6;
+            --text-dim: #9CA3AF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #0f0720 100%);
+            min-height: 100vh;
+        }
+
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        /* Hero Section */
+        .section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 48px;
+            padding: 80px 60px;
+            text-align: center;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            max-width: 800px;
+            width: 100%;
+            transform: perspective(1000px);
+            will-change: transform, opacity;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: clamp(3rem, 10vw, 6rem);
+            background: linear-gradient(135deg, #C084FC 0%, #E879F9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 24px;
+            filter: drop-shadow(0 0 20px rgba(192, 132, 252, 0.3));
+        }
+
+        .love-text {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            opacity: 0;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border: none;
+            padding: 18px 48px;
+            border-radius: 100px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.5);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.7);
+        }
+
+        .cta-button:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Letter Section */
+        #letter-section {
+            display: none;
+            opacity: 0;
+            padding-bottom: 100px;
+        }
+
+        .letter-content {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #E5E7EB;
+            text-align: left;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .letter-content p {
+            margin-bottom: 24px;
+        }
+
+        .signature {
+            font-family: 'Pacifico', cursive;
+            font-size: 2rem;
+            color: var(--accent);
+            margin-top: 40px;
+            text-align: right;
+        }
+
+        .heart-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ec4899;
+            font-size: 24px;
+            filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.3));
+        }
+
+        .glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 40px 30px;
+                border-radius: 32px;
+            }
+            .letter-content {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-bg"></div>
+    <div class="glow" id="mouse-glow"></div>
+    <div class="heart-rain" id="heart-rain"></div>
+    
+    <!-- Hero Section -->
+    <section class="section" id="hero-section">
+        <div class="glass-card" id="hero-card">
+            <h1 id="title">Happy Birthday Lou</h1>
+            <p class="love-text" id="love-msg">You make everything better</p>
+            <button class="cta-button" id="open-letter">
+                Read My Message
+                <span style="font-size: 1.4rem;">💜</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Letter Section -->
+    <section class="section" id="letter-section">
+        <div class="glass-card" id="letter-card">
+            <div class="letter-content">
+                <p>Happy birthday my sweetest loveliest babe, i love you so much and i wish this year to be different and enjoyable for you, i wish that you achieve everything you ever wanted to get.</p>
+                <p>I can not describe how much i love or adore you, you made me feel things i never felt, you made me feel loved, loving you is always something different and unique, looking at you feels calming and easy, you really make everything better, you make my life better.</p>
+                <p>Lou, you are the love of my life and i don’t want anyone on earth but you💜</p>
+                <div class="signature">Enjoy your day to the max 😘</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Stars background
+        const bg = document.getElementById('canvas-bg');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 2 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            bg.appendChild(star);
+        }
+
+        // Mouse glow effect
+        const glow = document.getElementById('mouse-glow');
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(glow, {
+                x: e.clientX - 300,
+                y: e.clientY - 300,
+                duration: 1.2,
+                ease: "power2.out"
+            });
+        });
+
+        // Initial Animations
+        gsap.set('.glass-card', { opacity: 0, y: 50 });
+        gsap.set('#title', { opacity: 0, y: 20 });
+        gsap.set('#love-msg', { opacity: 0, y: 20 });
+        gsap.set('#open-letter', { opacity: 0, scale: 0.9 });
+
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+        tl.to('#hero-card', { opacity: 1, y: 0, duration: 1.5 })
+          .to('#title', { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+          .to('#love-msg', { opacity: 1, y: 0, duration: 1 }, "-=0.6")
+          .to('#open-letter', { opacity: 1, scale: 1, duration: 0.8 }, "-=0.4");
+
+        // Card Hover Tilt
+        const cards = document.querySelectorAll('.glass-card');
+        cards.forEach(card => {
+            window.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
+                    const xRotation = (y / rect.height - 0.5) * 10;
+                    const yRotation = (x / rect.width - 0.5) * -10;
+                    gsap.to(card, {
+                        rotationX: xRotation,
+                        rotationY: yRotation,
+                        duration: 0.6
+                    });
+                } else {
+                    gsap.to(card, { rotationX: 0, rotationY: 0, duration: 0.6 });
+                }
+            });
+        });
+
+        // Open Letter Transition
+        document.getElementById('open-letter').addEventListener('click', () => {
+            gsap.to('#hero-section', { 
+                opacity: 0, 
+                y: -100, 
+                duration: 1, 
+                onComplete: () => {
+                    document.getElementById('hero-section').style.display = 'none';
+                    const letterSec = document.getElementById('letter-section');
+                    letterSec.style.display = 'flex';
+                    gsap.to(letterSec, { opacity: 1, duration: 1.5 });
+                    gsap.from('#letter-card', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" });
+                }
+            });
+        });
+
+        // Hearts Rain Effect
+        function createHeart() {
+            const container = document.getElementById('heart-rain');
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = ['💜', '💖', '✨', '🌸'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '-50px';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.opacity = Math.random() * 0.5 + 0.3;
+            container.appendChild(heart);
+
+            anime({
+                targets: heart,
+                translateY: window.innerHeight + 100,
+                translateX: function() { return anime.random(-100, 100); },
+                rotate: function() { return anime.random(-90, 90); },
+                duration: function() { return anime.random(4000, 8000); },
+                easing: 'linear',
+                complete: function() {
+                    heart.remove();
+                }
+            });
+        }
+
+        setInterval(createHeart, 500);
+
+    </script>
+</body>
+</html>
