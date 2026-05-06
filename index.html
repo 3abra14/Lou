@@ -309,7 +309,7 @@
                     const letterSec = document.getElementById('letter-section');
                     letterSec.style.display = 'flex';
                     gsap.to(letterSec, { opacity: 1, duration: 1.5 });
-                    gsap.from('#letter-card', { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" });
+                    gsap.to('#letter-card', { y: 0, opacity: 1, duration: 1.5, ease: "power4.out" });
                 }
             });
         });
